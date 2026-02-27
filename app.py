@@ -31,7 +31,7 @@ login_manager.login_view = "login"
 # ================= DATABASE MODELS ================= #
 
 class User(UserMixin, db.Model):
-    __tablename__ = "users"   # avoid reserved word "user"
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
@@ -43,7 +43,7 @@ class Chat(db.Model):
     message = db.Column(db.Text, nullable=False)
     response = db.Column(db.Text, nullable=False)
 
-# ✅ IMPORTANT: CREATE TABLES AFTER MODELS
+# ✅ CREATE TABLES AFTER MODELS
 with app.app_context():
     db.create_all()
 
@@ -54,7 +54,6 @@ def load_user(user_id):
 # ================= GROQ CONFIG ================= #
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
 client = Groq(api_key=GROQ_API_KEY)
 
 SYSTEM_PROMPT = """
@@ -118,6 +117,13 @@ def chat():
     chats = Chat.query.filter_by(user_id=current_user.id).order_by(Chat.id.asc()).all()
     return render_template("chat.html", chats=chats, username=current_user.username)
 
+# -------- NEW CHAT -------- #
+
+@app.route("/new_chat")
+@login_required
+def new_chat():
+    return redirect(url_for("chat"))
+
 # -------- ASK AI (GROQ) -------- #
 
 @app.route("/ask", methods=["POST"])
@@ -127,7 +133,7 @@ def ask():
 
     try:
         completion = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}

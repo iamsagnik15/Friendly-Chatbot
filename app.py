@@ -24,10 +24,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# ✅ CREATE TABLES FOR PRODUCTION (IMPORTANT)
-with app.app_context():
-    db.create_all()
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -35,15 +31,21 @@ login_manager.login_view = "login"
 # ================= DATABASE MODELS ================= #
 
 class User(UserMixin, db.Model):
+    __tablename__ = "users"   # avoid reserved word "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
 class Chat(db.Model):
+    __tablename__ = "chats"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     message = db.Column(db.Text, nullable=False)
     response = db.Column(db.Text, nullable=False)
+
+# ✅ IMPORTANT: CREATE TABLES AFTER MODELS
+with app.app_context():
+    db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):

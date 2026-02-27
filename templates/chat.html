@@ -1,0 +1,104 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<div class="main-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span>💬 Chats</span>
+            <a href="/new_chat" class="new-chat-btn">+ New</a>
+        </div>
+
+        <div class="history">
+            {% for chat in chats %}
+            <div class="history-item">
+                <span>{{ chat.message[:20] }}...</span>
+                <a href="/delete_chat/{{ chat.id }}" class="delete-icon">✖</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+
+        <!-- 🔥 UPDATED TOP BAR -->
+        <div class="chat-top-bar">
+            <div class="top-left">
+                🤖 Friendly AI
+            </div>
+
+            <div class="top-right">
+                👤 <span class="profile-name">{{ username }}</span>
+                <a href="/logout" class="logout-small">Logout</a>
+            </div>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            {% for chat in chats %}
+            <div class="message-row user">
+                <div class="avatar user-avatar">{{ username[0]|upper }}</div>
+                <div class="message-bubble user-bubble">{{ chat.message }}</div>
+            </div>
+
+            <div class="message-row bot">
+                <div class="avatar bot-avatar">AI</div>
+                <div class="message-bubble bot-bubble">{{ chat.response }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typing">
+            <div class="avatar bot-avatar">AI</div>
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="msg" placeholder="Type your message...">
+            <button onclick="send()">Send</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+async function send() {
+    let msg = document.getElementById("msg").value;
+    if (!msg) return;
+
+    let chatBox = document.getElementById("chat-box");
+    let typing = document.getElementById("typing");
+
+    chatBox.innerHTML += `
+        <div class="message-row user">
+            <div class="avatar user-avatar">${msg[0].toUpperCase()}</div>
+            <div class="message-bubble user-bubble">${msg}</div>
+        </div>
+    `;
+
+    document.getElementById("msg").value = "";
+    typing.style.display = "flex";
+
+    let response = await fetch("/ask", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: msg})
+    });
+
+    let data = await response.json();
+
+    typing.style.display = "none";
+
+    chatBox.innerHTML += `
+        <div class="message-row bot">
+            <div class="avatar bot-avatar">AI</div>
+            <div class="message-bubble bot-bubble">${data.reply}</div>
+        </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>

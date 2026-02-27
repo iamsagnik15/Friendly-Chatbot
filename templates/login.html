@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Friendly AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-body">
+
+<div class="login-container">
+    <div class="login-card">
+        <h2>🤖 Friendly AI</h2>
+        <p class="subtitle">Welcome back 👋</p>
+
+        <form method="POST">
+            
+            <div class="input-group">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <div class="input-group password-wrapper">
+                <input type="password" name="password" id="password" required>
+                <label>Password</label>
+                <span class="toggle-eye" onclick="togglePassword()">👁</span>
+            </div>
+
+            <button type="submit" class="glow-btn">Login</button>
+
+        </form>
+
+        <div class="auth-links">
+            <a href="/forgot_password" class="forgot">Forgot Password?</a>
+        </div>
+
+        <div class="register-link">
+            Don't have an account?
+            <a href="/register">Create one</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    let input = document.getElementById("password");
+    input.type = input.type === "password" ? "text" : "password";
+}
+</script>
+
+</body>
+</html>

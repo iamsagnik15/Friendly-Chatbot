@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Friendly AI Buddy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        🤖 Friendly AI Buddy
+    </div>
+
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="chat-input">
+        <input type="text" id="msg" placeholder="Type your message...">
+        <button onclick="send()">Send</button>
+    </div>
+</div>
+
+<script>
+async function send() {
+    let msgInput = document.getElementById("msg");
+    let message = msgInput.value;
+    if (!message) return;
+
+    let chatBox = document.getElementById("chat-box");
+
+    // User message
+    let userDiv = document.createElement("div");
+    userDiv.className = "message user";
+    userDiv.innerText = message;
+    chatBox.appendChild(userDiv);
+
+    msgInput.value = "";
+
+    let response = await fetch("/ask", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: message})
+    });
+
+    let data = await response.json();
+
+    // Bot message
+    let botDiv = document.createElement("div");
+    botDiv.className = "message bot";
+    botDiv.innerText = data.reply;
+    chatBox.appendChild(botDiv);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
+
+</body>
+</html>

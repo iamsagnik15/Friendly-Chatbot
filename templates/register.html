@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Friendly AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-body">
+
+<div class="login-container">
+    <div class="login-card">
+        <h2>🚀 Create Account</h2>
+        <p class="subtitle">Join Friendly AI today</p>
+
+        <form method="POST">
+
+            <div class="input-group">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+
+            <button type="submit" class="register-glow-btn">Register</button>
+        </form>
+
+        <div class="register-link">
+            Already have an account?
+            <a href="/login">Login</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

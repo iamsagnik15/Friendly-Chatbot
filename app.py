@@ -24,6 +24,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# ✅ CREATE TABLES FOR PRODUCTION (IMPORTANT)
+with app.app_context():
+    db.create_all()
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -121,7 +125,7 @@ def ask():
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="llama3-8b-8192",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
@@ -176,13 +180,6 @@ def logout():
     logout_user()
     return redirect(url_for("login"))
 
-# -------- NEW CHAT -------- #
-
-@app.route("/new_chat")
-@login_required
-def new_chat():
-    return redirect(url_for("chat"))
-
 # -------- FORGOT PASSWORD -------- #
 
 @app.route("/forgot_password", methods=["GET", "POST"])
@@ -202,10 +199,3 @@ def forgot_password():
             flash("User not found.")
 
     return render_template("forgot_password.html")
-
-# ================= MAIN ================= #
-
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run()

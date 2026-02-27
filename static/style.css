@@ -674,3 +674,80 @@ button:hover {
     from {opacity: 0; transform: translateY(20px);}
     to {opacity: 1; transform: translateY(0);}
 }
+
+/* ===== Branding ===== */
+
+.sidebar-brand {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-brand h2 {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.brand-sub {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.brand-quote {
+    font-size: 12px;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+/* ===== GitHub Owner Link ===== */
+
+.owner-link {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.owner-link:hover {
+    color: #3b82f6;
+    text-shadow: 0 0 8px rgba(59,130,246,0.6);
+}
+
+/* ===== Premium Top Bar ===== */
+
+.chat-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.profile-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-avatar-small {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.logout-btn {
+    margin-left: 15px;
+    padding: 6px 12px;
+    background: #ef4444;
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #dc2626;
+}

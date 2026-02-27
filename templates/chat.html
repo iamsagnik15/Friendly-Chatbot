@@ -2,49 +2,88 @@
 
 <div class="main-layout">
 
-    <!-- Sidebar -->
+    <!-- ================= SIDEBAR ================= -->
     <div class="sidebar">
+
+        <!-- Branding -->
+        <div class="sidebar-brand">
+            <h2>🤖 Friendly AI</h2>
+
+            <p class="brand-sub">
+                Built with ❤️ by 
+                <a href="https://github.com/iamsagnik15" 
+                   target="_blank" 
+                   class="owner-link">
+                   Sagnik
+                </a>
+            </p>
+
+            <p class="brand-quote">
+                Curiosity powered by intelligence.
+            </p>
+        </div>
+
+        <!-- Chat Header -->
         <div class="sidebar-header">
             <span>💬 Chats</span>
             <a href="/new_chat" class="new-chat-btn">+ New</a>
         </div>
 
+        <!-- Chat History -->
         <div class="history">
             {% for chat in chats %}
             <div class="history-item">
-                <span>{{ chat.message[:20] }}...</span>
+                <span>{{ chat.message[:22] }}...</span>
                 <a href="/delete_chat/{{ chat.id }}" class="delete-icon">✖</a>
             </div>
             {% endfor %}
         </div>
+
     </div>
 
-    <!-- Chat Area -->
+    <!-- ================= CHAT AREA ================= -->
     <div class="chat-area">
 
-        <!-- 🔥 UPDATED TOP BAR -->
+        <!-- Premium Top Bar -->
         <div class="chat-top-bar">
+
             <div class="top-left">
-                🤖 Friendly AI
+                💬 Chat Workspace
             </div>
 
             <div class="top-right">
-                👤 <span class="profile-name">{{ username }}</span>
-                <a href="/logout" class="logout-small">Logout</a>
+                <div class="profile-box">
+                    <div class="avatar user-avatar-small">
+                        {{ username[0]|upper }}
+                    </div>
+                    <span class="profile-name">{{ username }}</span>
+                </div>
+
+                <a href="/logout" class="logout-btn">Logout</a>
             </div>
+
         </div>
 
+        <!-- Chat Messages -->
         <div class="chat-box" id="chat-box">
             {% for chat in chats %}
+
             <div class="message-row user">
-                <div class="avatar user-avatar">{{ username[0]|upper }}</div>
-                <div class="message-bubble user-bubble">{{ chat.message }}</div>
+                <div class="avatar user-avatar">
+                    {{ username[0]|upper }}
+                </div>
+                <div class="message-bubble user-bubble">
+                    {{ chat.message }}
+                </div>
             </div>
 
             <div class="message-row bot">
                 <div class="avatar bot-avatar">AI</div>
-                <div class="message-bubble bot-bubble">{{ chat.response }}</div>
+                <div class="message-bubble bot-bubble">
+                    {{ chat.response }}
+                </div>
             </div>
+
             {% endfor %}
         </div>
 
@@ -56,22 +95,27 @@
             </div>
         </div>
 
+        <!-- Input Area -->
         <div class="input-area">
-            <input type="text" id="msg" placeholder="Type your message...">
+            <input type="text" id="msg" placeholder="Ask anything..." autocomplete="off">
             <button onclick="send()">Send</button>
         </div>
 
     </div>
+
 </div>
+
 
 <script>
 async function send() {
+
     let msg = document.getElementById("msg").value;
     if (!msg) return;
 
     let chatBox = document.getElementById("chat-box");
     let typing = document.getElementById("typing");
 
+    // Show user message instantly
     chatBox.innerHTML += `
         <div class="message-row user">
             <div class="avatar user-avatar">${msg[0].toUpperCase()}</div>
